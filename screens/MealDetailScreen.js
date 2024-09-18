@@ -1,44 +1,74 @@
-// /screens/MealDetailScreen.js
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
-import { MEALS } from '../data/dummy-data';
+import { View, Text, Image, StyleSheet, Button } from 'react-native';
 import { useRoute } from '@react-navigation/native';
+import { useFavorites } from '../contexts/FavoritesContext';
+import { MEALS } from '../data/dummy-data';
 
 const MealDetailScreen = () => {
   const route = useRoute();
   const { mealId } = route.params;
 
-  const selectedMeal = MEALS.find(meal => meal.id === mealId);
+  // Log mealId để kiểm tra giá trị
+  console.log('Received mealId:', mealId);
+
+  const { addFavorite, removeFavorite, isFavorite } = useFavorites();
+  const meal = MEALS.find((meal) => meal.id === mealId);
+
+  // Log meal để kiểm tra xem có món ăn được tìm thấy không
+  console.log('Found meal:', meal);
+
+  if (!meal) {
+    return (
+      <View style={styles.screen}>
+        <Text>Meal not found!</Text>
+      </View>
+    );
+  }
+
+  const handleFavoriteToggle = () => {
+    if (isFavorite(mealId)) {
+      removeFavorite(mealId);
+    } else {
+      addFavorite(mealId);
+    }
+  };
 
   return (
-    <View style={styles.container}>
-      <Image source={{ uri: selectedMeal?.imageUrl }} style={styles.image} />
-      <Text style={styles.title}>{selectedMeal?.name}</Text>
-      <Text style={styles.details}>{selectedMeal?.description}</Text>
+    <View style={styles.screen}>
+      <Image source={{ uri: meal.imageUrl }} style={styles.image} />
+      <Text style={styles.title}>{meal.name}</Text>
+      <Text style={styles.description}>{meal.description}</Text>
+      <Button
+        title={isFavorite(mealId) ? 'Remove from Favorites' : 'Add to Favorites'}
+        onPress={handleFavoriteToggle}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  screen: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 16,
   },
   image: {
     width: '100%',
-    height: 300,
-    borderRadius: 10,
+    height: 200,
+    marginBottom: 16,
   },
   title: {
     fontSize: 22,
     fontWeight: 'bold',
-    textAlign: 'center',
-    marginVertical: 16,
+    marginVertical: 10,
   },
-  details: {
+  description: {
     fontSize: 16,
     textAlign: 'center',
+    marginVertical: 10,
   },
 });
 
 export default MealDetailScreen;
+s

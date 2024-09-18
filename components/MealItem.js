@@ -1,13 +1,23 @@
-// /components/MealItem.js
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-const MealItem = ({ imageUrl, title, onSelect }) => (
-  <TouchableOpacity style={styles.mealItem} onPress={onSelect}>
-    <Image source={{ uri: imageUrl }} style={styles.mealImage} />
-    <Text style={styles.mealTitle}>{title}</Text>
-  </TouchableOpacity>
-);
+const MealItem = ({ meal }) => {
+  const navigation = useNavigation();
+
+  return (
+    <TouchableOpacity
+      style={styles.mealItem}
+      onPress={() => {
+        console.log('Navigating to MealDetail with mealId:', meal.id);
+        navigation.navigate('MealDetail', { mealId: meal.id });
+      }}
+    >
+      <Image source={{ uri: meal.imageUrl }} style={styles.mealImage} />
+      <Text style={styles.mealName}>{meal.name}</Text>
+    </TouchableOpacity>
+  );
+};
 
 const styles = StyleSheet.create({
   mealItem: {
@@ -19,9 +29,8 @@ const styles = StyleSheet.create({
   mealImage: {
     width: '100%',
     height: 200,
-    resizeMode: 'cover',
   },
-  mealTitle: {
+  mealName: {
     fontSize: 18,
     fontWeight: 'bold',
     textAlign: 'center',

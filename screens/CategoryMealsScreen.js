@@ -1,6 +1,5 @@
-// /screens/CategoryMealsScreen.js
-import React from 'react';
-import { View, FlatList, Text, Image, StyleSheet } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, FlatList, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { MEALS, CATEGORIES } from '../data/dummy-data';
 import { useRoute, useNavigation } from '@react-navigation/native';
 
@@ -9,25 +8,30 @@ const CategoryMealsScreen = () => {
   const navigation = useNavigation();
   const { categoryId } = route.params;
 
+  // Lọc các món ăn theo categoryId
   const displayedMeals = MEALS.filter(meal => meal.categoryId === categoryId);
 
-  React.useEffect(() => {
+  useEffect(() => {
+    // Cập nhật tiêu đề của màn hình dựa trên categoryId
     const categoryTitle = CATEGORIES.find(category => category.id === categoryId)?.title;
     navigation.setOptions({ title: categoryTitle });
   }, [categoryId, navigation]);
 
   const renderMealItem = ({ item }) => (
-    <View style={styles.mealItem}>
-      <Image source={{ uri: item.imageUrl }} style={styles.mealImage} />
+    <TouchableOpacity
+      style={styles.mealItem}
+      onPress={() => navigation.navigate('MealDetail', { mealId: item.id })}
+    >
+      <Image source={{ uri: item.imageUrl }} style={styles.mealImage} />npm s
       <Text style={styles.mealName}>{item.name}</Text>
-    </View>
+    </TouchableOpacity>
   );
 
   return (
     <FlatList
       data={displayedMeals}
       renderItem={renderMealItem}
-      keyExtractor={(item) => item.id}
+      keyExtractor={item => item.id}
     />
   );
 };

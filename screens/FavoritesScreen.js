@@ -1,42 +1,34 @@
 // /screens/FavoritesScreen.js
 import React from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, FlatList, Text, StyleSheet } from 'react-native';
+import { useFavorites } from '../contexts/FavoritesContext';
+import { MEALS } from '../data/dummy-data';
 import MealItem from '../components/MealItem';
 
-const DUMMY_FAVORITES = [
-  // Thay thế bằng dữ liệu thật hoặc sử dụng trạng thái local
-  { id: '1', name: 'Spaghetti', imageUrl: 'https://example.com/spaghetti.jpg' },
-  { id: '2', name: 'Lasagna', imageUrl: 'https://example.com/lasagna.jpg' },
-];
+const FavoritesScreen = () => {
+  const { favoriteMeals } = useFavorites();  // Đảm bảo rằng useFavorites() không trả về undefined
 
-const FavoritesScreen = ({ navigation }) => {
-  const renderMealItem = ({ item }) => (
-    <MealItem
-      imageUrl={item.imageUrl}
-      title={item.name}
-      onSelect={() => {
-        navigation.navigate('MealDetail', { mealId: item.id });
-      }}
-    />
-  );
+  const favoriteMealsList = MEALS.filter((meal) => favoriteMeals.includes(meal.id));
+
+  if (favoriteMealsList.length === 0) {
+    return (
+      <View style={styles.screen}>
+        <Text>No favorite meals found!</Text>
+      </View>
+    );
+  }
 
   return (
-    <View style={styles.container}>
-      {DUMMY_FAVORITES.length === 0 ? (
-        <Text>No favorite meals found!</Text>
-      ) : (
-        <FlatList
-          data={DUMMY_FAVORITES}
-          renderItem={renderMealItem}
-          keyExtractor={(item) => item.id}
-        />
-      )}
-    </View>
+    <FlatList
+      data={favoriteMealsList}
+      renderItem={({ item }) => <MealItem meal={item} />}
+      keyExtractor={(item) => item.id}
+    />
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  screen: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',

@@ -1,8 +1,8 @@
-// /navigation/MealsNavigator.js
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Ionicons } from 'react-native-vector-icons'; // Importing icons
 import CategoriesScreen from '../screens/CategoriesScreen';
 import CategoryMealsScreen from '../screens/CategoryMealsScreen';
 import MealDetailScreen from '../screens/MealDetailScreen';
@@ -35,7 +35,24 @@ function DrawerNavigator() {
 
 export default function MealsNavigator() {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ color, size }) => {
+          let iconName;
+
+          if (route.name === 'Home') {
+            iconName = 'home'; // Ionicons name for Home
+          } else if (route.name === 'Favorites') {
+            iconName = 'heart'; // Ionicons name for Favorites
+          } else if (route.name === 'Settings') {
+            iconName = 'settings'; // Ionicons name for Settings
+          }
+
+          // You can return any component that you like here!
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+      })}
+    >
       <Tab.Screen name="Home" component={DrawerNavigator} />
       <Tab.Screen name="Favorites" component={FavoritesScreen} />
       <Tab.Screen name="Settings" component={SettingsScreen} />
