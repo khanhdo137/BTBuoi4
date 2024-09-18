@@ -22,7 +22,7 @@ const CategoryMealsScreen = () => {
       style={styles.mealItem}
       onPress={() => navigation.navigate('MealDetail', { mealId: item.id })}
     >
-      <Image source={{ uri: item.imageUrl }} style={styles.mealImage} />npm s
+      <Image source={{ uri: item.imageUrl }} style={styles.mealImage} />
       <Text style={styles.mealName}>{item.name}</Text>
     </TouchableOpacity>
   );
