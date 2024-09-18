@@ -1,47 +1,35 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, Button } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { useRoute } from '@react-navigation/native';
-import { useFavorites } from '../contexts/FavoritesContext';
 import { MEALS } from '../data/dummy-data';
 
 const MealDetailScreen = () => {
   const route = useRoute();
   const { mealId } = route.params;
-
-  // Log mealId để kiểm tra giá trị
-  console.log('Received mealId:', mealId);
-
-  const { addFavorite, removeFavorite, isFavorite } = useFavorites();
+  
   const meal = MEALS.find((meal) => meal.id === mealId);
 
-  // Log meal để kiểm tra xem có món ăn được tìm thấy không
-  console.log('Found meal:', meal);
+  const handleOrderMeal = () => {
+    Alert.alert('Đặt món thành công!', `Bạn đã đặt ${meal.name} với giá ${meal.price ? meal.price.toLocaleString() : 'không xác định'} VND.`);
+  };
 
   if (!meal) {
     return (
       <View style={styles.screen}>
-        <Text>Meal not found!</Text>
+        <Text>Không tìm thấy món ăn!</Text>
       </View>
     );
   }
-
-  const handleFavoriteToggle = () => {
-    if (isFavorite(mealId)) {
-      removeFavorite(mealId);
-    } else {
-      addFavorite(mealId);
-    }
-  };
 
   return (
     <View style={styles.screen}>
       <Image source={{ uri: meal.imageUrl }} style={styles.image} />
       <Text style={styles.title}>{meal.name}</Text>
       <Text style={styles.description}>{meal.description}</Text>
-      <Button
-        title={isFavorite(mealId) ? 'Remove from Favorites' : 'Add to Favorites'}
-        onPress={handleFavoriteToggle}
-      />
+      <Text style={styles.price}>Giá: {meal.price ? meal.price.toLocaleString() : 'không xác định'} VND</Text>
+      <TouchableOpacity style={styles.button} onPress={handleOrderMeal}>
+        <Text style={styles.buttonText}>Đặt món</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -67,6 +55,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     marginVertical: 10,
+  },
+  price: {
+    fontSize: 18,
+    color: 'green',
+    marginVertical: 10,
+  },
+  button: {
+    backgroundColor: '#4CAF50',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 20,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
   },
 });
 

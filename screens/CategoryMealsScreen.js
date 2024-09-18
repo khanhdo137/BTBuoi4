@@ -18,12 +18,15 @@ const CategoryMealsScreen = () => {
   }, [categoryId, navigation]);
 
   const renderMealItem = ({ item }) => (
-    <TouchableOpacity
-      style={styles.mealItem}
+    <TouchableOpacity 
+      style={styles.mealItem} 
       onPress={() => navigation.navigate('MealDetail', { mealId: item.id })}
     >
       <Image source={{ uri: item.imageUrl }} style={styles.mealImage} />
       <Text style={styles.mealName}>{item.name}</Text>
+      <Text style={styles.price}>
+        Giá: {item.price ? `${item.price.toLocaleString()} VND` : 'Giá không xác định'}
+      </Text>
     </TouchableOpacity>
   );
 
@@ -38,7 +41,7 @@ const CategoryMealsScreen = () => {
 
 const styles = StyleSheet.create({
   mealItem: {
-    margin: 16,
+    marginBottom: 16,
     borderRadius: 8,
     overflow: 'hidden',
     backgroundColor: 'white',
@@ -53,6 +56,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     padding: 8,
+  },
+  price: {
+    fontSize: 16,
+    color: 'green',
+    textAlign: 'center',
+    paddingBottom: 8,
   },
 });
 

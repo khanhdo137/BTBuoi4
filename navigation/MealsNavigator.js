@@ -34,28 +34,32 @@ function DrawerNavigator() {
 }
 
 export default function MealsNavigator() {
-  return (
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ color, size }) => {
-          let iconName;
-
-          if (route.name === 'Home') {
-            iconName = 'home'; // Ionicons name for Home
-          } else if (route.name === 'Favorites') {
-            iconName = 'heart'; // Ionicons name for Favorites
-          } else if (route.name === 'Settings') {
-            iconName = 'settings'; // Ionicons name for Settings
-          }
-
-          // You can return any component that you like here!
-          return <Ionicons name={iconName} size={size} color={color} />;
-        },
-      })}
-    >
-      <Tab.Screen name="Home" component={DrawerNavigator} />
-      <Tab.Screen name="Favorites" component={FavoritesScreen} />
-      <Tab.Screen name="Settings" component={SettingsScreen} />
+   return (
+    <Tab.Navigator>
+      <Tab.Screen
+        name="Home"
+        component={DrawerNavigator}
+        options={{
+          title: 'Home',  // Tiêu đề Home
+          headerTitleAlign: 'center',  // Căn giữa tiêu đề
+        }}
+      />
+      <Tab.Screen
+        name="Favorites"
+        component={FavoritesScreen}
+        options={{
+          title: 'Favorites',
+          headerTitleAlign: 'center',  // Căn giữa tiêu đề
+        }}
+      />
+      <Tab.Screen
+        name="Settings"
+        component={SettingsScreen}
+        options={{
+          title: 'Settings',
+          headerTitleAlign: 'center',  // Căn giữa tiêu đề
+        }}
+      />
     </Tab.Navigator>
   );
 }
